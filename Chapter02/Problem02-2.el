@@ -12,11 +12,6 @@
     ("(first (rest (first '((a b) (c d)))))"                "b")
     ))
 
-(defun validate-ANSWERS ()
-  (dolist (row ANSWERS)
-    (message (first row))
-  )
-
 (defun valid-ANSWER-p (answer)
   (equal
    (eval (first (read-from-string (first answer))))
@@ -35,4 +30,3 @@
 (if (invalid-ANSWERS)
     (message "FAIL !")
   (message "All Correct !"))
-
