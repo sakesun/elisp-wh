@@ -20,7 +20,7 @@
 (defun invalid-ANSWERS-iter (invalids answers)
   (if (null answers) invalids
     (let ((ans (first answers)))
-      (if (and (consp ans) (valid-ANSWER-p ans))
+      (if (valid-ANSWER-p ans)
 	  (invalid-ANSWERS-iter invalids (rest answers))
 	(invalid-ANSWERS-iter (cons ans invalids) (rest answers))))))
 
