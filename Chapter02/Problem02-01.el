@@ -1,8 +1,5 @@
 "Problem 2-1: Each of the following things may be an atom, a list, or neither. Identify each accordingly."
 
-(atom (first (read-from-string "ATOM")))
-(listp (first (read-from-string "(THIS IS AN ATOM)")))
-
 (defconst ANSWERS
   '(
     ("ATOM"                     "atom")
@@ -31,17 +28,20 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
   (replace-regexp-in-string "\\`[ \t\n]*" "" (replace-regexp-in-string "[ \t\n]*\\'" "" string))
   )
 
+(defun read-from-string-strict (s)
+  (setq s (trim-string s))
+  (let* ((slen (length s))
+	 (info (read-from-string s))
+	 (r (first info))
+	 (rlen (rest info)))
+    (when (< rlen slen) (signal 'invalid-read-syntax nil))
+    r))
+
 (defun valid-ANSWER-p (answer)
   (let ((q nil)
 	(neither nil))
     (condition-case nil
-	(let* ((qstr (trim-string (first answer)))
-	       (qstrlen (length qstr))
-	       (qinfo (read-from-string qstr))
-	       (qread (first qinfo))
-	       (qreadlen (rest qinfo)))
-	  (when (< qreadlen qstrlen) (signal 'invalid-read-syntax nil))
-	  (setq q qread))
+	(setq q (read-from-string-strict (first answer)))
       (invalid-read-syntax (setq neither t))
       (end-of-file (setq neither t)))
     (let  ((checker (get-checker (first (rest answer)))))
